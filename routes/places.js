@@ -1,7 +1,5 @@
 const express = require("express");
-// const cors = require("cors");
 const router = express.Router();
-// router.use(cors());
 
 const dataBase = "../data/places.json";
 const places = require(`${dataBase}`);
@@ -9,33 +7,35 @@ const places = require(`${dataBase}`);
 router.get("/", async (req, res) => {
   try {
     const { name, type } = req.query;
-    const limit = req.query.limit || 0;
+    const limit = req.query.limit || 100;
     const skip = req.query.skip || 0;
     let newPlaces = [];
     let newName = new RegExp(name, "i");
 
     if (type && name) {
       let newType = type.split(",");
-      // console.log(newType);
 
       newPlaces = places.filter(
         (place) =>
           newName.test(place.name) === true && newType.includes(place.type)
       );
-      res.status(200).json(newPlaces.slice(0, limit, skip));
+      res.status(200).json(newPlaces.slice(0, limit));
+      res.status(200).json(newPlaces.slice(0, skip));
     }
 
     if (name) {
       newPlaces = places.filter((place) => newName.test(place.name));
-      res.status(200).json(newPlaces.slice(0, limit, skip));
+      res.status(200).json(newPlaces.slice(0, limit));
+      res.status(200).json(newPlaces.slice(0, skip));
     }
     if (type) {
       let newType = type.split(",");
 
       newPlaces = places.filter((place) => newType.includes(place.type));
-      res.status(200).json(newPlaces.slice(0, limit, skip));
+      res.status(200).json(newPlaces.slice(0, limit));
+      // res.status(200).json(newPlaces.slice(0, skip));
     } else {
-      res.status(200).json(places.slice(0, limit, skip));
+      res.status(200).json(places.slice(0, limit));
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

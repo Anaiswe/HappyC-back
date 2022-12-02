@@ -1,16 +1,13 @@
-// Simple sample server
-// Il faut prévoir un .env pour les variables d'environnement
-// install/import Cors
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
-
+const morgan = require("morgan");
 const mongoose = require("mongoose");
-
 const app = express();
 
-app.use(cors());
+require("dotenv").config();
 
+app.use(cors());
+app.use(morgan("dev"));
 app.use(express.json());
 
 // MongoDB
@@ -33,4 +30,3 @@ app.all("*", function (req, res) {
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is ok!");
 });
-// Il faudra bien faire tous les process env (port mongo etc..)
